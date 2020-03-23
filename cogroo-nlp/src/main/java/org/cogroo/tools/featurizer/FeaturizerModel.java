@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.cogroo.dictionary.FeatureDictionary;
 
-import opennlp.model.AbstractModel;
+import opennlp.tools.ml.model.AbstractModel;
 import opennlp.tools.util.BaseToolFactory;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.model.ArtifactSerializer;

@@ -20,12 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import opennlp.model.AbstractModel;
-import opennlp.model.EventStream;
-import opennlp.model.MaxentModel;
-import opennlp.model.TrainUtil;
+import opennlp.tools.ml.EventTrainer;
+import opennlp.tools.ml.model.AbstractModel;
+import opennlp.tools.ml.model.MaxentModel;
+import opennlp.tools.ml.TrainerFactory;
+
 import opennlp.tools.postag.POSSample;
-import opennlp.tools.util.BeamSearch;
+import opennlp.tools.ml.BeamSearch;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Sequence;
 import opennlp.tools.util.TrainingParameters;
@@ -50,6 +51,7 @@ public class FeaturizerME implements Featurizer {
    * The model used to assign chunk tags to a sequence of tokens.
    */
   protected MaxentModel model;
+  private FeaturizerFactory myFeaturizerFactory;
 
   /**
    * Initializes the current instance with the specified model and the specified
@@ -61,18 +63,18 @@ public class FeaturizerME implements Featurizer {
    *          The size of the beam that should be used when decoding sequences.
    */
   public FeaturizerME(FeaturizerModel model, int beamSize) {
-    FeaturizerFactory factory = model.getFactory();
+
+    this.myFeaturizerFactory = model.getFactory();
+
     this.model = model.getFeaturizerModel();
-    beam = new BeamSearch<WordTag>(beamSize,
-        factory.getFeaturizerContextGenerator(), this.model,
-        factory.getSequenceValidator(), 0);
+    beam = new BeamSearch<WordTag>(beamSize, this.model);
   }
 
   /**
    * Initializes the current instance with the specified model. The default beam
    * size is used.
    * 
-   * @param model
+   * @param model the model
    */
   public FeaturizerME(FeaturizerModel model) {
     this(model, DEFAULT_BEAM_SIZE);
@@ -80,7 +82,9 @@ public class FeaturizerME implements Featurizer {
 
   public String[] featurize(String[] toks, String[] tags) {
     bestSequence = beam.bestSequence(WordTag.create(toks, tags),
-        new Object[] {});
+        new Object[] {},
+            this.myFeaturizerFactory.getFeaturizerContextGenerator(),
+            this.myFeaturizerFactory.getSequenceValidator());
     if(bestSequence != null) {
       List<String> c = bestSequence.getOutcomes();
       return c.toArray(new String[c.size()]);
@@ -90,13 +94,17 @@ public class FeaturizerME implements Featurizer {
 
   public Sequence[] topKSequences(String[] sentence, String[] tags) {
     return beam.bestSequences(DEFAULT_BEAM_SIZE,
-        WordTag.create(sentence, tags), new Object[] {});
+        WordTag.create(sentence, tags), new Object[] {},
+            this.myFeaturizerFactory.getFeaturizerContextGenerator(),
+            this.myFeaturizerFactory.getSequenceValidator());
   }
 
   public Sequence[] topKSequences(String[] sentence, String[] tags,
       double minSequenceScore) {
     return beam.bestSequences(DEFAULT_BEAM_SIZE,
-        WordTag.create(sentence, tags), null, minSequenceScore);
+        WordTag.create(sentence, tags), null, minSequenceScore,
+            this.myFeaturizerFactory.getFeaturizerContextGenerator(),
+            this.myFeaturizerFactory.getSequenceValidator());
   }
 
   /**
@@ -131,10 +139,12 @@ public class FeaturizerME implements Featurizer {
 
     Map<String, String> manifestInfoEntries = new HashMap<String, String>();
 
-    EventStream es = new FeaturizerEventStream(in, factory.getFeaturizerContextGenerator());
+    ObjectStream es = new FeaturizerEventStream(in, factory.getFeaturizerContextGenerator());
 
-    AbstractModel maxentModel = TrainUtil.train(es, mlParams.getSettings(),
-        manifestInfoEntries);
+    EventTrainer trainer = TrainerFactory.getEventTrainer((TrainingParameters) mlParams.getObjectSettings(),
+            manifestInfoEntries);
+
+    AbstractModel maxentModel = (AbstractModel) trainer.train(es);
 
     return new FeaturizerModel(lang, maxentModel, manifestInfoEntries, factory);
   }

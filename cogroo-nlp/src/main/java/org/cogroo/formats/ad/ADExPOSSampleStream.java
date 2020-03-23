@@ -51,7 +51,7 @@ public class ADExPOSSampleStream implements ObjectStream<POSSample> {
 
   /**
    * Creates a new {@link POSSample} stream from a line stream, i.e.
-   * {@link ObjectStream}< {@link String}>, that could be a
+   * {@literal {@link ObjectStream}< {@link String}>}, that could be a
    * {@link PlainTextByLineStream} object.
    * 
    * @param lineStream
@@ -62,6 +62,8 @@ public class ADExPOSSampleStream implements ObjectStream<POSSample> {
    *          expression plus the prefix B- or I- (CONLL convention)
    * @param includeFeatures
    *          if true will combine the POS Tag with the feature tags
+   * @param additionalContext
+   *          to set additional context
    */
   public ADExPOSSampleStream(ObjectStream<String> lineStream, boolean expandME,
       boolean includeFeatures, boolean additionalContext) {

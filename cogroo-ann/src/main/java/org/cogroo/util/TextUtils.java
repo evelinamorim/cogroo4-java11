@@ -62,6 +62,8 @@ public class TextUtils {
   }
 
   /**
+   * @param document the document to be printed
+   *
    * @return the <code>String</code> to be printed
    */
   public static String nicePrint(Document document) {

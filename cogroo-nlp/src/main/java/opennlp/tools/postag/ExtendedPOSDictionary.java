@@ -24,11 +24,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import opennlp.tools.dictionary.serializer.DictionaryEntryPersistor;
 import org.cogroo.tools.featurizer.WordTag;
 
 
 import opennlp.tools.dictionary.serializer.Attributes;
-import opennlp.tools.dictionary.serializer.DictionarySerializer;
+import opennlp.tools.util.model.DictionarySerializer;
 import opennlp.tools.dictionary.serializer.Entry;
 import opennlp.tools.dictionary.serializer.EntryInserter;
 import opennlp.tools.util.InvalidFormatException;
@@ -179,8 +180,7 @@ public class ExtendedPOSDictionary implements Iterable<WordTag>,
         throw new UnsupportedOperationException();
       }
     };
-
-    DictionarySerializer.serialize(out, entries, caseSensitive);
+    DictionaryEntryPersistor.serialize(out, entries, caseSensitive);
   }
 
 //  @Override
@@ -236,19 +236,19 @@ public class ExtendedPOSDictionary implements Iterable<WordTag>,
    * 
    * After creation is finished the provided {@link InputStream} is closed.
    * 
-   * @param in
+   * @param in: Entrada para dicionario pos
    * 
    * @return the pos dictionary
    * 
-   * @throws IOException
-   * @throws InvalidFormatException
+   * @throws IOException if it is not able to open dictionary file
+   * @throws InvalidFormatException if the dictionary is not in the valid format
    */
   public static ExtendedPOSDictionary create(InputStream in)
       throws IOException, InvalidFormatException {
 
     final ExtendedPOSDictionary newPosDict = new ExtendedPOSDictionary();
 
-    boolean isCaseSensitive = DictionarySerializer.create(in,
+    boolean isCaseSensitive = DictionaryEntryPersistor.create(in,
         new EntryInserter() {
           public void insert(Entry entry) throws InvalidFormatException {
 

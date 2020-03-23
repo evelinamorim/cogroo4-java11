@@ -28,6 +28,7 @@ import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.Leaf;
 import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.Node;
 import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.TreeElement;
 import opennlp.tools.namefind.NameSample;
+import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
@@ -54,7 +55,7 @@ import org.cogroo.tools.featurizer.FeatureSample;
  */
 public class ADFeaturizerSampleStream implements ObjectStream<FeatureSample> {
 
-  private final ObjectStream<ADSentenceStream.Sentence> adSentenceStream;
+  private ObjectStream<ADSentenceStream.Sentence> adSentenceStream = null;
 
   private int start = -1;
   private int end = -1;
@@ -68,11 +69,13 @@ public class ADFeaturizerSampleStream implements ObjectStream<FeatureSample> {
 
   /**
    * Creates a new {@link NameSample} stream from a line stream, i.e.
-   * {@link ObjectStream}< {@link String}>, that could be a
+   * {@literal {@link ObjectStream}< {@link String}>}, that could be a
    * {@link PlainTextByLineStream} object.
    * 
    * @param lineStream
    *          a stream of lines as {@link String}
+   * @param expandME
+   *          to expand the ME
    */
   public ADFeaturizerSampleStream(ObjectStream<String> lineStream,
       boolean expandME) {
@@ -87,9 +90,10 @@ public class ADFeaturizerSampleStream implements ObjectStream<FeatureSample> {
    *          the Corpus {@link InputStream}
    * @param charsetName
    *          the charset of the Arvores Deitadas Corpus
+   * @param expandME  to expand the ME
    */
-  public ADFeaturizerSampleStream(InputStream in, String charsetName,
-      boolean expandME) {
+  public ADFeaturizerSampleStream(InputStreamFactory in, String charsetName,
+                                  boolean expandME) {
 
     try {
       this.expandME = expandME;
@@ -98,6 +102,8 @@ public class ADFeaturizerSampleStream implements ObjectStream<FeatureSample> {
     } catch (UnsupportedEncodingException e) {
       // UTF-8 is available on all JVMs, will never happen
       throw new IllegalStateException(e);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

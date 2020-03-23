@@ -38,18 +38,26 @@ public class ChunkerCrossValidator {
    * @deprecated Use
    *             {@link #ChunkerCrossValidator(String, TrainingParameters, ChunkerFactory, ChunkerEvaluationMonitor...)}
    *             instead.
+   * @param languageCode deprecated
+   * @param cutoff deprecated
+   * @param iterations deprecated
    */
   @Deprecated
   public ChunkerCrossValidator(String languageCode, int cutoff, int iterations) {
 
     this.languageCode = languageCode;
 
-    params = ModelUtil.createTrainingParameters(iterations, cutoff);
+    //params = ModelUtil.createTrainingParameters(iterations, cutoff);
+    params = ModelUtil.createDefaultTrainingParameters();
     listeners = null;
   }
 
   /**
-   * @deprecated Use {@link #ChunkerCrossValidator(String, TrainingParameters, ChunkerFactory, ChunkerEvaluationMonitor...)} instead. 
+   * @deprecated Use {@link #ChunkerCrossValidator(String, TrainingParameters, ChunkerFactory, ChunkerEvaluationMonitor...)} instead.
+   *
+   * @param languageCode code
+   * @param params params to training
+   * @param listeners monitor
    */
   public ChunkerCrossValidator(String languageCode, TrainingParameters params,
       ChunkerEvaluationMonitor... listeners) {
@@ -58,6 +66,15 @@ public class ChunkerCrossValidator {
     this.params = params;
     this.listeners = listeners;
   }
+
+  /**
+   * @param languageCode code
+   * @param params training params
+   * @param factory the factory chunker
+   * @param listeners monitor
+   *
+   */
+
   
   public ChunkerCrossValidator(String languageCode, TrainingParameters params,
       ChunkerFactory factory, ChunkerEvaluationMonitor... listeners) {
@@ -75,7 +92,9 @@ public class ChunkerCrossValidator {
    * @param nFolds
    *          number of folds
    * 
-   * @throws IOException
+   * @throws IOException if it is not possible to read the data
+   * @throws InvalidFormatException if it in the wrong format
+   *
    */
   public void evaluate(ObjectStream<ChunkSample> samples, int nFolds)
       throws IOException, InvalidFormatException, IOException {

@@ -31,6 +31,7 @@ import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.Node;
 import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.TreeElement;
 import opennlp.tools.formats.ad.PortugueseContractionUtility;
 import opennlp.tools.namefind.NameSample;
+import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 import opennlp.tools.util.Span;
@@ -61,7 +62,7 @@ import org.cogroo.ContractionUtility;
  */
 public class ADContractionNameSampleStream implements ObjectStream<NameSample> {
 
-  private final ObjectStream<ADSentenceStream.Sentence> adSentenceStream;
+  private ObjectStream<ADSentenceStream.Sentence> adSentenceStream = null;
 
   /**
    * To keep the last left contraction part
@@ -76,7 +77,7 @@ public class ADContractionNameSampleStream implements ObjectStream<NameSample> {
 
   /**
    * Creates a new {@link NameSample} stream from a line stream, i.e.
-   * {@link ObjectStream}< {@link String}>, that could be a
+   * {@literal {@link ObjectStream}< {@link String}>}, that could be a
    * {@link PlainTextByLineStream} object.
    * 
    * @param lineStream
@@ -94,22 +95,24 @@ public class ADContractionNameSampleStream implements ObjectStream<NameSample> {
    * Creates a new {@link NameSample} stream from a {@link InputStream}
    * 
    * @param in
-   *          the Corpus {@link InputStream}
+   *          the Corpus {@link InputStreamFactory}
    * @param charsetName
    *          the charset of the Arvores Deitadas Corpus
    * @param tags
    *          the tags we are looking for, or null for all
    */
-  public ADContractionNameSampleStream(InputStream in, String charsetName,
-      Set<String> tags) {
+  public ADContractionNameSampleStream(InputStreamFactory in, String charsetName,
+                                       Set<String> tags) {
 
     try {
-      this.adSentenceStream = new ADSentenceStream(new PlainTextByLineStream(
-          in, charsetName));
+        this.adSentenceStream = new ADSentenceStream(new PlainTextByLineStream(
+            in, charsetName));
       this.tags = tags;
     } catch (UnsupportedEncodingException e) {
       // UTF-8 is available on all JVMs, will never happen
       throw new IllegalStateException(e);
+    }catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

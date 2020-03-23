@@ -57,7 +57,8 @@ public class FeaturizerCrossValidator {
    * @param nFolds
    *          number of folds
    * 
-   * @throws IOException
+   * @throws IOException if it is not able to read the samples
+   * @throws InvalidFormatException if it is not the valid format
    */
   public void evaluate(ObjectStream<FeatureSample> samples, int nFolds)
       throws IOException, InvalidFormatException, IOException {

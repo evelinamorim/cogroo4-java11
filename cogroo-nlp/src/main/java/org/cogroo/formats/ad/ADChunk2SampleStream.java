@@ -30,6 +30,7 @@ import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.Leaf;
 import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.Node;
 import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.TreeElement;
 import opennlp.tools.namefind.NameSample;
+import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
@@ -58,7 +59,7 @@ import opennlp.tools.util.PlainTextByLineStream;
  */
 public class ADChunk2SampleStream implements ObjectStream<ChunkSample> {
 
-    protected final ObjectStream<ADSentenceStream.Sentence> adSentenceStream;
+    protected ObjectStream<ADSentenceStream.Sentence> adSentenceStream = null;
 
     private int start = -1;
     private int end = -1;
@@ -69,7 +70,7 @@ public class ADChunk2SampleStream implements ObjectStream<ChunkSample> {
 
     /**
      * Creates a new {@link NameSample} stream from a line stream, i.e.
-     * {@link ObjectStream}< {@link String}>, that could be a
+     * {@literal {@link ObjectStream}< {@link String}>}, that could be a
      * {@link PlainTextByLineStream} object.
      * 
      * @param lineStream
@@ -87,7 +88,7 @@ public class ADChunk2SampleStream implements ObjectStream<ChunkSample> {
      * @param charsetName
      *          the charset of the Arvores Deitadas Corpus
      */
-    public ADChunk2SampleStream(InputStream in, String charsetName) {
+    public ADChunk2SampleStream(InputStreamFactory in, String charsetName) {
 
         try {
             this.adSentenceStream = new ADSentenceStream(new PlainTextByLineStream(
@@ -95,6 +96,8 @@ public class ADChunk2SampleStream implements ObjectStream<ChunkSample> {
         } catch (UnsupportedEncodingException e) {
             // UTF-8 is available on all JVMs, will never happen
             throw new IllegalStateException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
