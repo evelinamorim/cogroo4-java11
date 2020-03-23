@@ -16,14 +16,16 @@
 package org.cogroo.tools.featurizer;
 
 import java.io.IOException;
+import java.util.Iterator;
 
-import opennlp.model.Event;
+import opennlp.tools.util.AbstractEventStream;
 import opennlp.tools.util.ObjectStream;
+import opennlp.tools.ml.model.Event;
 
 /**
  * Class for creating an event stream out of data files for training a chunker.
  */
-public class FeaturizerEventStream extends opennlp.model.AbstractEventStream {
+public class FeaturizerEventStream extends opennlp.tools.util.AbstractEventStream {
 
   private FeaturizerContextGenerator cg;
   private ObjectStream<FeatureSample> data;
@@ -42,6 +44,7 @@ public class FeaturizerEventStream extends opennlp.model.AbstractEventStream {
    */
   public FeaturizerEventStream(ObjectStream<FeatureSample> d,
       FeaturizerContextGenerator cg) {
+    super(d);
     this.cg = cg;
     data = d;
     ei = 0;
@@ -84,5 +87,10 @@ public class FeaturizerEventStream extends opennlp.model.AbstractEventStream {
     } else {
       events = new Event[0];
     }
+  }
+
+  @Override
+  protected Iterator<Event> createEvents(Object o) {
+    return null;
   }
 }

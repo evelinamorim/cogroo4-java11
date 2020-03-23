@@ -41,6 +41,8 @@ public class FeaturizerEvaluationErrorListener extends
 
   /**
    * Creates a listener that will print to a given {@link OutputStream}
+   *
+   * @param outputStream the output to print
    */
   public FeaturizerEvaluationErrorListener(OutputStream outputStream) {
     super(outputStream);

@@ -42,6 +42,8 @@ public class ChunkEvaluationErrorListener extends
 
   /**
    * Creates a listener that will print to a given {@link OutputStream}
+   *
+   * @param outputStream The output stream
    */
   public ChunkEvaluationErrorListener(OutputStream outputStream) {
     super(outputStream);

@@ -21,6 +21,7 @@ public class GovernmentCheckerTest {
 
 	@BeforeClass
 	public static void init() {
+
 		analyzer = ComponentFactory.create(new Locale("pt", "BR")).createPipe();
 	}
 

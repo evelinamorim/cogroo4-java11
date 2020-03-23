@@ -16,14 +16,18 @@
 package org.cogroo.formats;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
 import opennlp.tools.cmdline.params.BasicFormatParams;
 import opennlp.tools.formats.AbstractSampleStreamFactory;
+import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 
 import org.cogroo.tools.featurizer.FeatureSample;
 import org.cogroo.tools.featurizer.FeatureSampleStream;
@@ -52,10 +56,19 @@ public class FeatureSampleStreamFactory extends
 
     CmdLineUtil.checkInputFile("Data", params.getData());
     FileInputStream sampleDataIn = CmdLineUtil.openInFile(params.getData());
+    try {
+      InputStreamFactory inSample = new MarkableFileInputStreamFactory(params.getData());
+      ObjectStream<String> lineStream = new PlainTextByLineStream(
+              inSample, params.getEncoding());
 
-    ObjectStream<String> lineStream = new PlainTextByLineStream(
-        sampleDataIn.getChannel(), params.getEncoding());
+      return new FeatureSampleStream(lineStream);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-    return new FeatureSampleStream(lineStream);
+    return null;
+
   }
 }

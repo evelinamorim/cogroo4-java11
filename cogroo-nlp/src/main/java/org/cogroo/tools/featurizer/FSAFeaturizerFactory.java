@@ -48,7 +48,9 @@ public class FSAFeaturizerFactory extends FeaturizerFactory {
   /**
    * Creates a {@link FSAFeaturizerFactory}. Use this constructor to
    * programmatically create a factory.
-   * 
+   *
+   * @param featureDictionary dictionary of features
+   * @param cgFlags flags
    */
   public FSAFeaturizerFactory(FeatureDictionary featureDictionary, String cgFlags) {
     super((FeatureDictionary) null, cgFlags);

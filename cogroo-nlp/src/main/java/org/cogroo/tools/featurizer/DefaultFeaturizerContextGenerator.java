@@ -51,7 +51,7 @@ public class DefaultFeaturizerContextGenerator implements
   
   /**
    * Default is shnc
-   * @param flags
+   * @param flags flags of featurizer
    */
   public DefaultFeaturizerContextGenerator(String flags) {
     this.isWiderContext = flags.contains("w");

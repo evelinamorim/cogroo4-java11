@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
-
+import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.formats.ad.ADSentenceStream.Sentence;
 import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.Leaf;
@@ -110,8 +110,12 @@ public class ADChunkBasedShallowParserSampleStream extends ADChunk2SampleStream 
    *          the Corpus {@link InputStream}
    * @param charsetName
    *          the charset of the Arvores Deitadas Corpus
+   * @param commaSeparatedFunctTags tags
+   * @param isIncludePOSTags to include pos tags
+   * @param useCGTag Use tags
+   * @param expandME to expand
    */
-  public ADChunkBasedShallowParserSampleStream(InputStream in,
+  public ADChunkBasedShallowParserSampleStream(InputStreamFactory in,
       String charsetName, String commaSeparatedFunctTags,
       boolean isIncludePOSTags, boolean useCGTag, boolean expandME) {
     

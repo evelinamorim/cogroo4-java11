@@ -40,6 +40,7 @@ import opennlp.tools.cmdline.BasicCmdLineTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.TerminateToolException;
 import opennlp.tools.postag.Triple;
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 import opennlp.tools.util.featuregen.StringPattern;
 
 import org.cogroo.entities.impl.MorphologicalTag;
@@ -94,7 +95,7 @@ BasicCmdLineTool {
       // load corpus tags
 
       ADFeaturizerSampleStream sentenceStream = new ADFeaturizerSampleStream(
-          new FileInputStream(corpusFile), "ISO-8859-1", params.getExpandME());
+          new MarkableFileInputStreamFactory(corpusFile), "ISO-8859-1", params.getExpandME());
       Set<String> knownFeats = new HashSet<String>();
       Set<String> knownPostags = new HashSet<String>();
       FeatureSample sample = sentenceStream.read();
@@ -123,7 +124,7 @@ BasicCmdLineTool {
       Map<String, Set<String>> added = new TreeMap<String, Set<String>>();
 
       if (params.getIncludeFromCorpus()) {
-        sentenceStream = new ADFeaturizerSampleStream(new FileInputStream(
+        sentenceStream = new ADFeaturizerSampleStream(new MarkableFileInputStreamFactory(
             corpusFile), "ISO-8859-1", params.getExpandME());
         sample = sentenceStream.read();
         while (sample != null) {

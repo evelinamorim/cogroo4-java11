@@ -157,6 +157,11 @@ public class FSADictionary implements TagDictionary, LemmaDictionary, Iterable<S
   }
   
   /** This is used by rule system */
+  /***
+   *
+   * @param aWord the word to be analyzed
+   * @return a list of word, pos
+   */
   public List<PairWordPOSTag> getTagsAndLemms(String aWord) {
     // TODO: acabar isso usando Cache.. Colocar cache no 
     try {

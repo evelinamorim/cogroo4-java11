@@ -41,6 +41,8 @@ public class FeatureSample {
    *          POS Tags for the sentence
    * @param feats
    *          Feature tags
+   * @param lemma
+   *          feature lemmas
    */
   public FeatureSample(String[] sentence, String[] lemma, String[] tags, String[] feats) {
 
@@ -65,6 +67,7 @@ public class FeatureSample {
    *          POS Tags for the sentence
    * @param feats
    *          Feature tags
+   * @param lemma feature lemmas
    */
   public FeatureSample(List<String> sentence, List<String> lemma, List<String> tags,
       List<String> feats) {
@@ -79,22 +82,31 @@ public class FeatureSample {
     this.feats = Collections.unmodifiableList(new ArrayList<String>((feats)));
   }
 
-  /** Gets the training sentence */
+  /** Gets the training sentence
+   * @return String[] sentence
+   * */
   public String[] getSentence() {
     return sentence.toArray(new String[sentence.size()]);
   }
   
-  /** Gets the training sentence */
+  /** Gets the training sentence
+   *
+   * @return String[] sentence
+   * */
   public String[] getLemmas() {
     return lemma.toArray(new String[lemma.size()]);
   }
 
-  /** Gets the POS Tags for the sentence */
+  /** Gets the POS Tags for the sentence
+   * @return String[] sentence
+   * */
   public String[] getTags() {
     return tags.toArray(new String[tags.size()]);
   }
 
-  /** Gets the feature tags */
+  /** Gets the feature tags
+   * @return String[] features
+   * */
   public String[] getFeatures() {
     return feats.toArray(new String[feats.size()]);
   }

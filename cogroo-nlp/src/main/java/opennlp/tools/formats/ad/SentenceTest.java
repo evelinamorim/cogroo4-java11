@@ -22,6 +22,7 @@ import java.io.FileWriter;
 
 import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.tokenize.TokenSample;
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 import opennlp.tools.util.Span;
@@ -51,7 +52,7 @@ public class SentenceTest {
     FileInputStream sampleDataIn = new FileInputStream(data);
 
     ObjectStream<SentenceSample> sampleStream = new ADSentenceSampleStream(
-        new PlainTextByLineStream(sampleDataIn.getChannel(), "ISO-8859-1"),
+        new PlainTextByLineStream(new MarkableFileInputStreamFactory(data), "ISO-8859-1"),
         true);
 
     SentenceSample sentSample = sampleStream.read();
