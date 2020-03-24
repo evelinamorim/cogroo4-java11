@@ -28,7 +28,10 @@ import org.cogroo.tools.featurizer.WordTag;
 
 
 import opennlp.tools.dictionary.serializer.Attributes;
-import opennlp.tools.dictionary.serializer.DictionarySerializer;
+
+//import opennlp.tools.dictionary.serializer.DictionarySerializer;
+import opennlp.tools.dictionary.serializer.DictionaryEntryPersistor;
+
 import opennlp.tools.dictionary.serializer.Entry;
 import opennlp.tools.dictionary.serializer.EntryInserter;
 import opennlp.tools.util.InvalidFormatException;
@@ -180,7 +183,8 @@ public class ExtendedPOSDictionary implements Iterable<WordTag>,
       }
     };
 
-    DictionarySerializer.serialize(out, entries, caseSensitive);
+     DictionaryEntryPersistor.serialize(out, entries,caseSensitive);
+    //DictionarySerializer.serialize(out, entries, caseSensitive);
   }
 
 //  @Override
@@ -248,7 +252,7 @@ public class ExtendedPOSDictionary implements Iterable<WordTag>,
 
     final ExtendedPOSDictionary newPosDict = new ExtendedPOSDictionary();
 
-    boolean isCaseSensitive = DictionarySerializer.create(in,
+    boolean isCaseSensitive = DictionaryEntryPersistor.create(in,
         new EntryInserter() {
           public void insert(Entry entry) throws InvalidFormatException {
 
