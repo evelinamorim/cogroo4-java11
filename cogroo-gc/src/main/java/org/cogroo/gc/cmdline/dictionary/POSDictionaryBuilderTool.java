@@ -32,6 +32,7 @@ import opennlp.tools.cmdline.TerminateToolException;
 import opennlp.tools.postag.ExtendedPOSDictionary;
 import opennlp.tools.postag.MyPOSDictionary;
 
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 import org.cogroo.formats.ad.ADFeaturizerSampleStream;
 import org.cogroo.interpreters.FlorestaTagInterpreter;
 import org.cogroo.interpreters.JspellTagInterpreter;
@@ -69,7 +70,7 @@ public class POSDictionaryBuilderTool extends BasicCmdLineTool {
       // load corpus tags
 
       ADFeaturizerSampleStream sentenceStream = new ADFeaturizerSampleStream(
-          new FileInputStream(corpusFile), "ISO-8859-1", false);
+          new MarkableFileInputStreamFactory(corpusFile), "ISO-8859-1", false);
       Set<String> knownFeats = new HashSet<String>();
       Set<String> knownPostags = new HashSet<String>();
       FeatureSample sample = sentenceStream.read();

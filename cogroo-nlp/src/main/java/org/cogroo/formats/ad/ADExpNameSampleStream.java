@@ -32,6 +32,7 @@ import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.Node;
 import opennlp.tools.formats.ad.ADSentenceStream.SentenceParser.TreeElement;
 import opennlp.tools.formats.ad.PortugueseContractionUtility;
 import opennlp.tools.namefind.NameSample;
+import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 import opennlp.tools.util.Span;
@@ -60,7 +61,7 @@ import opennlp.tools.util.Span;
  */
 public class ADExpNameSampleStream implements ObjectStream<NameSample> {
 
-  private final ObjectStream<ADSentenceStream.Sentence> adSentenceStream;
+  private ObjectStream<ADSentenceStream.Sentence> adSentenceStream = null;
 
   /**
    * To keep the last left contraction part
@@ -76,13 +77,14 @@ public class ADExpNameSampleStream implements ObjectStream<NameSample> {
 
   /**
    * Creates a new {@link NameSample} stream from a line stream, i.e.
-   * {@link ObjectStream}< {@link String}>, that could be a
+   * {@literal {@link ObjectStream}< {@link String}>}, that could be a
    * {@link PlainTextByLineStream} object.
    * 
    * @param lineStream
    *          a stream of lines as {@link String}
    * @param tags
    *          the tags we are looking for, or null for all
+   * @param useAdaptativeFeatures flag to use adaptative features
    */
   public ADExpNameSampleStream(ObjectStream<String> lineStream,
       Set<String> tags, boolean useAdaptativeFeatures) {
@@ -100,9 +102,11 @@ public class ADExpNameSampleStream implements ObjectStream<NameSample> {
    *          the charset of the Arvores Deitadas Corpus
    * @param tags
    *          the tags we are looking for, or null for all
+   * @param useAdaptativeFeatures
+   *          flat to use or not adaptative features
    */
-  public ADExpNameSampleStream(InputStream in, String charsetName,
-      Set<String> tags, boolean useAdaptativeFeatures) {
+  public ADExpNameSampleStream(InputStreamFactory in, String charsetName,
+                               Set<String> tags, boolean useAdaptativeFeatures) {
     this.useAdaptativeFeatures = useAdaptativeFeatures;
     try {
       this.adSentenceStream = new ADSentenceStream(new PlainTextByLineStream(
@@ -111,6 +115,8 @@ public class ADExpNameSampleStream implements ObjectStream<NameSample> {
     } catch (UnsupportedEncodingException e) {
       // UTF-8 is available on all JVMs, will never happen
       throw new IllegalStateException(e);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

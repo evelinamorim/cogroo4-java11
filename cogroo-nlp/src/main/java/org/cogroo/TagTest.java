@@ -15,12 +15,14 @@
  */
 package org.cogroo;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 import org.cogroo.formats.ad.ADExPOSSampleStream;
 
 import opennlp.tools.postag.POSSample;
@@ -30,15 +32,15 @@ import opennlp.tools.util.PlainTextByLineStream;
 public class TagTest {
 
   public static void main(String[] args) throws Exception {
-
-    InputStream in = new FileInputStream(
+    String fileIn = "/Users/wcolen/Documents/wrks/corpus/Bosque/Bosque_CF_8.0.ad.txt";
+    File in = new File(
         "/Users/wcolen/Documents/wrks/corpus/Bosque/Bosque_CF_8.0.ad.txt");
         //"/Users/wcolen/Documents/wrks/corpus/FlorestaVirgem/FlorestaVirgem_CF_3.0_ad.txt");
 
     String encoding = "ISO-8859-1";
 
     ObjectStream<POSSample> sampleStream = new ADExPOSSampleStream(
-        new PlainTextByLineStream(new InputStreamReader(in, encoding)), false,
+        new PlainTextByLineStream(new MarkableFileInputStreamFactory(in), encoding), false,
         true, false);
     
     SortedSet<String> tags = new TreeSet<String>();

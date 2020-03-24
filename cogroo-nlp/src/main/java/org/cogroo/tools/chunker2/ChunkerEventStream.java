@@ -16,8 +16,10 @@
 package org.cogroo.tools.chunker2;
 
 import java.io.IOException;
+import java.util.Iterator;
 
-import opennlp.model.Event;
+//import opennlp.model.Event;
+import opennlp.tools.ml.model.Event;
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.util.ObjectStream;
 
@@ -26,7 +28,7 @@ import org.cogroo.tools.featurizer.WordTag;
 /**
  * Class for creating an event stream out of data files for training a chunker.
  */
-public class ChunkerEventStream extends opennlp.model.AbstractEventStream {
+public class ChunkerEventStream extends opennlp.tools.util.AbstractEventStream<ChunkSample>{
 
   private ChunkerContextGenerator cg;
   private ObjectStream<ChunkSample> data;
@@ -45,6 +47,7 @@ public class ChunkerEventStream extends opennlp.model.AbstractEventStream {
    */
   public ChunkerEventStream(ObjectStream<ChunkSample> d,
       ChunkerContextGenerator cg) {
+    super(d);
     this.cg = cg;
     data = d;
     ei = 0;
@@ -85,5 +88,11 @@ public class ChunkerEventStream extends opennlp.model.AbstractEventStream {
     } else {
       events = new Event[0];
     }
+  }
+
+
+  @Override
+  protected Iterator<Event> createEvents(ChunkSample chunkSample) {
+    return null;
   }
 }

@@ -42,7 +42,9 @@ public class DefaultFeaturizerFactory extends FeaturizerFactory {
   /**
    * Creates a {@link DefaultFeaturizerFactory}. Use this constructor to
    * programmatically create a factory.
-   * 
+   *
+   * @param featureDictionary dictionary of features
+   * @param cgFlags flags
    */
   public DefaultFeaturizerFactory(FeatureDictionary featureDictionary, String cgFlags) {
     super(featureDictionary, cgFlags);

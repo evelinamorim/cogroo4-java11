@@ -17,6 +17,8 @@ package org.cogroo.formats.ad;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ import java.util.List;
 
 import opennlp.tools.chunker.ChunkSample;
 
+import opennlp.tools.util.InputStreamFactory;
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 import org.cogroo.formats.ad.ADChunkBasedShallowParserSampleStream;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,11 +60,26 @@ public class ADChunkBasedShallowParserSampleStreamTest {
 
   @Before
   public void setup() throws IOException {
+
     InputStream in = ADChunkBasedShallowParserSampleStreamTest.class
-        .getResourceAsStream("/br/ccsl/cogroo/formats/ad/ad.sample");
+            .getResourceAsStream("/br/ccsl/cogroo/formats/ad/ad.sample");
+
+    File tempFile = File.createTempFile(String.valueOf(in.hashCode()), ".tmp");
+    tempFile.deleteOnExit();
+
+    try (FileOutputStream out = new FileOutputStream(tempFile)) {
+      //copy stream
+      byte[] buffer = new byte[1024];
+      int bytesRead;
+      while ((bytesRead = in.read(buffer)) != -1) {
+        out.write(buffer, 0, bytesRead);
+      }
+    }
+
+    InputStreamFactory inF = new MarkableFileInputStreamFactory(tempFile);
 
     ADChunkBasedShallowParserSampleStream stream = new ADChunkBasedShallowParserSampleStream(
-        in, "UTF-8", "SUBJ,P", false, false, false);
+        inF, "UTF-8", "SUBJ,P", false, false, false);
 
     ChunkSample sample = stream.read();
 

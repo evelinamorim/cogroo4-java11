@@ -37,9 +37,10 @@ public class RulesXmlAccessTest {
   private String getRule() throws IOException {
     
     URL url = this.getClass().getResource("/org/cogroo/tools/checker/rules/applier/sinlgetonRule.xml");
-    String text = CharStreams.toString(
-        CharStreams.newReaderSupplier(Files.newInputStreamSupplier(new File(url.getFile())) , Charsets.UTF_8));
-  
+    //String text = CharStreams.toString(
+    //    CharStreams.newReaderSupplier(Files.asByteSource(new File(url.getFile())) , Charsets.UTF_8));
+
+    String text = Files.toString(new File(url.getFile()),Charsets.UTF_8);
     return text;
   }
 

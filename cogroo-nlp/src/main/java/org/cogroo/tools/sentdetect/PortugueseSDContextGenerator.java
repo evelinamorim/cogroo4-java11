@@ -47,7 +47,7 @@ public class PortugueseSDContextGenerator implements SDContextGenerator {
    * Creates a new <code>SDContextGenerator</code> instance with no induced
    * abbreviations.
    * 
-   * @param eosCharacters
+   * @param eosCharacters end of files characters
    */
   public PortugueseSDContextGenerator(char[] eosCharacters) {
     this(Collections.<String> emptySet(), eosCharacters);
@@ -61,7 +61,7 @@ public class PortugueseSDContextGenerator implements SDContextGenerator {
    *          a <code>Set</code> of Strings representing induced abbreviations
    *          in the training data. Example: &quot;Mr.&quot;
    * 
-   * @param eosCharacters
+   * @param eosCharacters end of files character
    */
   public PortugueseSDContextGenerator(Set<String> inducedAbbreviations,
       char[] eosCharacters) {

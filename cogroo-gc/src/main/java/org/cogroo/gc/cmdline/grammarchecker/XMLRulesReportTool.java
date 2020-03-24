@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 
+import com.google.common.io.Closer;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.BasicCmdLineTool;
 import opennlp.tools.cmdline.CmdLineUtil;
@@ -82,6 +83,7 @@ public class XMLRulesReportTool extends BasicCmdLineTool {
       throw new TerminateToolException(1, "Could not create pipeline!");
     }
 
+    Closer closer = Closer.create();
     try {
       CogrooHtml report = new CogrooHtml(outFile, cogroo);
       report.evaluate();
@@ -90,13 +92,21 @@ public class XMLRulesReportTool extends BasicCmdLineTool {
       if(!jsFile.exists()) {
         InputStream is = this.getClass().getResourceAsStream("/org/cogroo/gc/htmlreport/overlib.js");
         OutputStream os = new FileOutputStream(jsFile);
+
         ByteStreams.copy(is, os);
-        Closeables.closeQuietly(os);
-        Closeables.closeQuietly(is);
+
+        closer.register(os);
+        closer.register(is);
       }
     } catch (Exception e) {
       e.printStackTrace();
       throw new TerminateToolException(1, "Failure during report build.");
+    }finally {
+      try {
+        closer.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
     
   }

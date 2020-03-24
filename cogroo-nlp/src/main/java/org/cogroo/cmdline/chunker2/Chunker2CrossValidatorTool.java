@@ -27,6 +27,7 @@ import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.TerminateToolException;
 import opennlp.tools.cmdline.params.CVParams;
 import opennlp.tools.cmdline.params.DetailedFMeasureEvaluatorParams;
+import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.eval.EvaluationMonitor;
 import opennlp.tools.util.eval.FMeasure;
 import opennlp.tools.util.model.ModelUtil;
@@ -56,8 +57,7 @@ public final class Chunker2CrossValidatorTool
 
     mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
     if (mlParams == null) {
-      mlParams = ModelUtil.createTrainingParameters(params.getIterations(),
-          params.getCutoff());
+      mlParams = ModelUtil.createDefaultTrainingParameters();
     }
 
     List<EvaluationMonitor<ChunkSample>> listeners = new LinkedList<EvaluationMonitor<ChunkSample>>();

@@ -17,6 +17,7 @@
 
 package org.cogroo.cmdline.chunker2;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,6 +29,7 @@ import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.PerformanceMonitor;
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.util.InvalidFormatException;
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
@@ -52,13 +54,16 @@ public class Chunker2Tool extends BasicCmdLineTool {
 
       ChunkerME chunker = new ChunkerME(model, ChunkerME.DEFAULT_BEAM_SIZE);
 
-      ObjectStream<String> lineStream =
-        new PlainTextByLineStream(new InputStreamReader(System.in));
-
-      PerformanceMonitor perfMon = new PerformanceMonitor(System.err, "sent");
-      perfMon.start();
-
+      InputStreamReader isr = new InputStreamReader(System.in);
+      BufferedReader br = new BufferedReader(isr);
       try {
+        String fileName = br.readLine();
+        File fileIn = new File(fileName);
+        ObjectStream<String> lineStream =
+                new PlainTextByLineStream(new MarkableFileInputStreamFactory(fileIn), "utf-8");
+
+        PerformanceMonitor perfMon = new PerformanceMonitor(System.err, "sent");
+        perfMon.start();
         String line;
         while ((line = lineStream.read()) != null) {
 
@@ -72,19 +77,23 @@ public class Chunker2Tool extends BasicCmdLineTool {
           }
 
           String[] chunks = chunker.chunk(posSample.getSentence(),
-              posSample.getTags());
+                  posSample.getTags());
 
           System.out.println(new ChunkSample(posSample.getSentence(),
-              posSample.getTags(), chunks).nicePrint());
+                  posSample.getTags(), chunks).nicePrint());
 
           perfMon.incrementCounter();
         }
-      }
-      catch (IOException e) {
+        perfMon.stopAndPrintFinalResult();
+
+      } catch (IOException e) {
+        e.printStackTrace();
         CmdLineUtil.handleStdinIoError(e);
       }
 
-      perfMon.stopAndPrintFinalResult();
+
+
+
     }
   }
 }

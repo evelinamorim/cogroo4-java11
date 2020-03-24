@@ -18,6 +18,7 @@ package org.cogroo.tools.namefinder;
 import java.io.File;
 import java.io.FileInputStream;
 
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 import org.cogroo.formats.ad.ADContractionNameSampleStream;
 
 import opennlp.tools.cmdline.namefind.NameEvaluationErrorListener;
@@ -44,10 +45,10 @@ public class DictionaryNameFinderTest {
   }
 
   private static ObjectStream<NameSample> createSample() throws Exception {
-    FileInputStream sampleDataIn = new FileInputStream(new File("/Users/wcolen/Documents/wrks/corpus/Bosque/Bosque_CF_8.0.ad.txt"));
+    File sampleDataIn = new File("/Users/wcolen/Documents/wrks/corpus/Bosque/Bosque_CF_8.0.ad.txt");
     
     return new ADContractionNameSampleStream(new PlainTextByLineStream(
-        sampleDataIn.getChannel(), "ISO-8859-1"), null);
+        new MarkableFileInputStreamFactory(sampleDataIn), "ISO-8859-1"), null);
   }
 
   private static Dictionary createDictionary() throws Exception {
