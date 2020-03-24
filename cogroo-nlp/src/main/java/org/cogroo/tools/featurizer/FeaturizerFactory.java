@@ -26,10 +26,6 @@ import java.util.Map;
 import java.util.Set;
 
 import opennlp.tools.ml.model.AbstractModel;
-import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSTagger;
-import opennlp.tools.postag.POSTaggerFactory;
-import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.util.BaseToolFactory;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.SequenceValidator;
@@ -58,9 +54,6 @@ public abstract class FeaturizerFactory extends BaseToolFactory {
   /**
    * Creates a {@link FeaturizerFactory}. Use this constructor to
    * programmatically create a factory.
-   *
-   * @param featureDictionary dictionary of features
-   * @param cgFlags flags
    * 
    */
   public FeaturizerFactory(FeatureDictionary featureDictionary, String cgFlags) {
@@ -162,14 +155,8 @@ public abstract class FeaturizerFactory extends BaseToolFactory {
         Set<String> modelTags = new HashSet<String>();
 
         AbstractModel posModel = this.artifactProvider
-        .getArtifact(FeaturizerModel.FEATURIZER_MODEL_ENTRY_NAME);
-        //POSModel posModel = this.artifactProvider
-        //        .getArtifact(FeaturizerModel.FEATURIZER_MODEL_ENTRY_NAME);
-       // POSTaggerME tagger = new POSTaggerME(posModel);
-
-        //for (String pt: tagger.getAllPosTags()){
-        //  modelTags.add(pt);
-        //}
+            .getArtifact(FeaturizerModel.FEATURIZER_MODEL_ENTRY_NAME);
+        
         for (int i = 0; i < posModel.getNumOutcomes(); i++) {
           modelTags.add(posModel.getOutcome(i));
         }
